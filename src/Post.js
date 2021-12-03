@@ -23,7 +23,7 @@ function Post({name , description, message, photoUrl}) {
                   <p>{message} </p>
                 </div>
            <div className="post__button">
-           <InputOption Icon={ThumbUpAlt} title="Like"
+                                <InputOption Icon={ThumbUpAlt} title="Like"
            color="gray"/>
            <InputOption Icon={ChatIcon} title="Comment"
            color="gray"/>
