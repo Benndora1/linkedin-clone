@@ -12,18 +12,21 @@ import { db } from "./Firebase";
 import firebase from "firebase/compat/app";
 
 function Feed() {
-  const [input, setInput] = useState([]);
+  const [input, setInput] = useState([""]);
   const [posts, setPosts] = useState([]); //eslint-disable-line
 
+  // getting th posts from the firebase db
   useEffect(() => {
-    db.collection("posts").onSnapshot((snapshot) =>
-      setPosts(
-        snapshot.docs.map((doc) => ({
-          id: doc.id,
-          data: doc.data(),
-        }))
-      )
-    );
+    db.collection("posts")
+      .orderBy("timestamp", "desc")
+      .onSnapshot((snapshot) =>
+        setPosts(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            data: doc.data(),
+          }))
+        )
+      );
   }, []);
 
   const sendPost = (e) => {
@@ -35,6 +38,8 @@ function Feed() {
       photoUrl: "",
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
+
+    setInput([""]);
   };
 
   return (
@@ -44,9 +49,9 @@ function Feed() {
           <CreateIcon />
           <form>
             <input
-              type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              type="text"
             />
             <button onClick={sendPost} type="submit">
               Send
@@ -67,11 +72,15 @@ function Feed() {
       </div>
 
       {/* posts */}
-      {posts.map((post) => (
-        <Post />
+      {posts.map(({ id, data: { name, description, message, photoUrl } }) => (
+        <Post
+          key={id}
+          name={name}
+          description={description}
+          message={message}
+          photoUrl={photoUrl}
+        />
       ))}
-
-      <Post name="Benson" description="This is test" message="iT WORKED " />
     </div>
   );
 }
