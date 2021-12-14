@@ -12,8 +12,8 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig); // eslint-disable-line
-const db = firebase.firestore(); //eslint-disable-line
-const auth = firebase.auth(); //eslint-disable-line
+const db = firebase.firestore(); // eslint-disable-line
+const auth = firebase.auth(); // eslint-disable-line
 
 export { db, auth };
 export default db;

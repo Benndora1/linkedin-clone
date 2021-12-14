@@ -7,9 +7,18 @@ import HomeIcon from "@material-ui/icons/Home";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import BusinessCenterIcon from "@material-ui/icons/BusinessCenter";
 import ChatIcon from "@material-ui/icons/Chat";
+import { useDispatch } from "react-redux";
+import { auth } from "./Firebase";
+import { logout } from "./features/userSlice";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 
 function Header() {
+  const dispatch = useDispatch();
+
+  const logOutOfApp = () => {
+    dispatch(logout());
+    auth.signOut();
+  };
   return (
     <div className="header">
       <div className="header__left ">
@@ -29,10 +38,7 @@ function Header() {
         <HeaderOption Icon={BusinessCenterIcon} title="Jobs" />
         <HeaderOption Icon={ChatIcon} title="Messaging" />
         <HeaderOption Icon={NotificationsIcon} title="Notifications" />
-        <HeaderOption
-          avatar="https://compassionate-leakey-e9b16b.netlify.app/images/IG_Sonny.jpeg"
-          title="Me"
-        />
+        <HeaderOption title="Me" avatar={true} onClick={logOutOfApp} />
       </div>
     </div>
   );

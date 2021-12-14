@@ -9,9 +9,12 @@ import EventNoteIcon from "@material-ui/icons/EventNote";
 import Post from "./Post";
 import { useState } from "react";
 import { db } from "./Firebase";
+import { useSelector } from "react-redux";
+import { selectUser } from "./features/userSlice";
 import firebase from "firebase/compat/app";
 
 function Feed() {
+  const user = useSelector(selectUser);
   const [input, setInput] = useState([""]);
   const [posts, setPosts] = useState([]); //eslint-disable-line
 

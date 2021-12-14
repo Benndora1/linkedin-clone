@@ -1,17 +1,32 @@
 import React, { useState } from "react";
 import "./Login.css";
-import "firebase/compat/auth";
-import { Dispatch } from "redux";
+import { useDispatch } from "react-redux";
+import { auth } from "./Firebase";
+import { login } from "./features/userSlice";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [profilePic, setProfilePic] = useState("");
-  const dispatch = useDispatch(); 
- 
+  const dispatch = useDispatch();
+
   const loginToApp = (e) => {
     e.preventDefault();
+
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .then((userAuth) => {
+        dispatch(
+          login({
+            email: userAuth.user.email,
+            uid: userAuth.user.uid,
+            displayName: userAuth.user.displayName,
+            profileUrl: userAuth.user.photoUrl,
+          })
+        );
+      })
+      .catch((error) => alert(error));
   };
 
   const register = () => {
@@ -19,22 +34,25 @@ function Login() {
       return alert("Please enter the Name");
     }
 
-    auth.createUserWithEmailAndPassword(email, password)
-    .then((userAuth) => {
-        userAuth.user.updateProfile({
-            displayName: name,
-            photoURL: profilePic
-          })
-        //   dispatching the user to the redux store 
-            .then(() => {
-                dispatch(login({
-                    uid: userAuth.user.uid,
-                    email: userAuth.user.email,
-                    displayName: name,
-                    photoUrl: profilePic,
-                }));
-            }).catch(error => alert(error.message));});
- 
+    auth.createUserWithEmailAndPassword(email, password).then((userAuth) => {
+      userAuth.user
+        .updateProfile({
+          displayName: name,
+          photoURL: profilePic,
+        })
+        //   dispatching the user to the redux store
+        .then(() => {
+          dispatch(
+            login({
+              uid: userAuth.user.uid,
+              email: userAuth.user.email,
+              displayName: name,
+              photoUrl: profilePic,
+            })
+          );
+        })
+        .catch((error) => alert(error.message));
+    });
   };
 
   return (
@@ -84,4 +102,4 @@ function Login() {
   );
 }
 
-export default class Login;
+export default Login;
