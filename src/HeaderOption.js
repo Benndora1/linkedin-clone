@@ -4,11 +4,11 @@ import { useSelector } from "react-redux";
 import { selectUser } from "./features/userSlice";
 import { Avatar } from "@material-ui/core";
 
-function HeaderOption({ avatar, Icon, title }) {
+function HeaderOption({ avatar, Icon, title, onClick }) {
   const user = useSelector(selectUser);
 
   return (
-    <div className="headerOption">
+    <div onClick={onClick} className="headerOption">
       {Icon && (
         <Icon
           className="headerOption
